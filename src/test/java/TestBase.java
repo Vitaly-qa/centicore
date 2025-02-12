@@ -44,12 +44,9 @@ public class TestBase {
         Attach.pageSource();
         Attach.browserConsoleLogs();
         Attach.addVideo();
-    }
-
-    @AfterAll
-    public static void tearDownWebDriver() {
         closeWebDriver();
     }
+
 }
 
 
