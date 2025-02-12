@@ -7,7 +7,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static io.qameta.allure.Allure.step;
 
-public class Centicore_tests extends TestBase {
+public class CenticoreTests extends TestBase {
 
     @Test
     @DisplayName("Проверка перехода на страницу о компании")
