@@ -1,0 +1,16 @@
+{
+  "base": {
+    "project": "some project",
+    "environment": "some env",
+    "comment": "commet here @Vitaly_55555",
+    "reportLink": "https://jenkins.autotests.cloud/job/Demoqa-Vit-demoqa_properties",
+    "language": "en",
+    "allureFolder": "allure-report",
+    "enableChart": true
+  },
+  "telegram": {
+    "token": "8168003994:AAHixxKX0sutomzyYfqTERUpRJnsHFWTHiM",
+    "chat": "1018211497",
+    "replyTo": ""
+  }
+}
