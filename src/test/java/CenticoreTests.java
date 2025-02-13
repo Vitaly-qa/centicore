@@ -45,7 +45,7 @@ public class CenticoreTests extends TestBase {
 
 
     @Test
-    @DisplayName("Переход на страницу Контакты")
+    @DisplayName("Переходим на страницу Контакты")
     @Tag("smoke")
     void contactPageTest() {
         step("Переходим на страничку Контактов", () -> {
