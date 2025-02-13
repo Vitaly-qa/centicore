@@ -66,11 +66,12 @@ gradle clean test
 ***Удалённый запуск через Jenkins:***
 ```bash  
 clean 
-smoke 
-"-DbrowserType=${BROWSER}" 
+${TASK} 
+--info
+"-Dwd=${HOST}" 
+"-Dbrowser=${BROWSER}"
 "-DbrowserVersion=${BROWSER_VERSION}"
-"-DbrowserSize=${BROWSER_SIZE}" 
-"-DremoteHost=${SELENOID_HOST}"
+"-DbrowserSize=${BROWSER_SIZE}"
 ```
 
 ***Джоба Jenkins:***
