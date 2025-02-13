@@ -73,6 +73,8 @@ smoke
 "-DremoteHost=${SELENOID_HOST}"
 ```
 
+***Джоба Jenkins:***
+
 <img src="/images/Jenkins.PNG" width="300" height="150"> 
 
 Видео прогона одного из автотестов
