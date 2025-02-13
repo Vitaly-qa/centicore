@@ -3,7 +3,7 @@
     "project": "some project",
     "environment": "some env",
     "comment": "commet here @Vitaly_55555",
-    "reportLink": "https://jenkins.autotests.cloud/job/Demoqa-Vit-demoqa_properties",
+    "reportLink": "https://jenkins.autotests.cloud/job/Centicore-test",
     "language": "en",
     "allureFolder": "allure-report",
     "enableChart": true
