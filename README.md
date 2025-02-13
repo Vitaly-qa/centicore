@@ -31,15 +31,47 @@
 
 Отчетность о прогоне тестов в Telegram позволит оперативно отслеживать потенциальные и уже существующие проблемы на сайте
 
-Пример отчета в telegram:
+### **Пример отчета в Telegram:**
 
 <img src="/images/allure%20report%20telegram.PNG" width="300" height="300"> 
 
-Пример allure отчета:
+### **Пример Allure отчета:**
 
 <img src="/images/allure%20report%20Jenkins.PNG" width="300" height="170"> 
 
-Jenkins:
+### *Тест-кейсы*
+
+<img src="/images/allure%20report%20test%20cases.PNG" width="300" height="170">
+
+### **Параметры сборки в Jenkins:**
+
+- *ENVIRONMENT (окружение в котором будем запускать тесты, по умолчанию PROD)*
+- *COMMENT (комментарий, который отобразиться в Telegram отчете)*
+- *BROWSER (браузер, по умолчанию chrome)*
+- *SELENOID_HOST (адрес хоста для удалённого запуска тестов)*
+- *BROWSER_VERSION (версия браузера, по умолчанию 126)*
+- *BROWSER_SIZE (размер окна браузера, по умолчанию 1920x1080)*
+
+<a id="console"></a>
+## Команды для запуска из терминала
+___
+***Локальный запуск:***
+```bash  
+gradle clean smoke_test
+```
+```bash  
+gradle clean test
+```
+
+***Удалённый запуск через Jenkins:***
+```bash  
+clean 
+smoke 
+"-DbrowserType=${BROWSER}" 
+"-DbrowserVersion=${BROWSER_VERSION}"
+"-DbrowserSize=${BROWSER_SIZE}" 
+"-DremoteHost=${SELENOID_HOST}"
+```
 
 <img src="/images/Jenkins.PNG" width="300" height="150"> 
 
