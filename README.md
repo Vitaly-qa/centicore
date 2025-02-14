@@ -80,4 +80,4 @@ ${TASK}
 
 Видео прогона одного из автотестов
 
-![animation.gif](animation/animation.gif))
+![animation.gif](animation/animation.gif)
