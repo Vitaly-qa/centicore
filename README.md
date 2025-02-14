@@ -78,6 +78,6 @@ ${TASK}
 
 <img src="/images/Jenkins.PNG" width="300" height="150"> 
 
-Видео прогона одного из автотестов
+***Видео прогона одного из автотестов:***
 
 ![animation.gif](animation/animation.gif)
