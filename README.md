@@ -1,6 +1,6 @@
 # Покрытие сайта https://centicore.ru тестами предоставляет множество преимуществ для бизнеса и пользователей. Вот основные из них:
 
-<img src="/images/logo.PNG" width="300" height="100"> 
+<img src="/images/logo.PNG"> 
 
 Сайт — важный инструмент для представления продукции и взаимодействия с клиентами. Для обеспечения его надежности и качества необходимо внедрение тестирования.
 Вот несколько причин, почему покрытие тестами критически важно:
@@ -35,15 +35,15 @@
 
 ### **Пример отчета в Telegram:**
 
-<img src="/images/allure%20report%20telegram.PNG" width="300" height="300"> 
+<img src="/images/allure%20report%20telegram.PNG"> 
 
 ### [**Пример Allure отчета:**](https://jenkins.autotests.cloud/job/Centicore-test/15/allure)
 
-<img src="/images/allure%20report%20Jenkins.PNG" width="400" height="200"> 
+<img src="/images/allure%20report%20Jenkins.PNG"> 
 
 ### *Тест-кейсы*
 
-<img src="/images/allure%20report%20test%20cases.PNG" width="400" height="200">
+<img src="/images/allure%20report%20test%20cases.PNG">
 
 ### [**Параметры сборки в Jenkins:**](https://jenkins.autotests.cloud/job/Centicore-test)
 
@@ -78,10 +78,8 @@ ${TASK}
 
 [***Джоба Jenkins:***](https://jenkins.autotests.cloud/job/Centicore-test/14)
 
-<img src="/images/Jenkins.PNG" width="400" height="200"> 
+<img src="/images/Jenkins.PNG"> 
 
-***Видео прогона одного из автотестов:***
-
-**Тест: Переходим по кнопке Хабр на сайт Хабр**
+***Видео прогона одного из автотестов "Переходим по кнопке Хабр на сайт Хабр":***
 
 ![animation.gif](animation/animation.gif)
