@@ -57,7 +57,7 @@
 <a id="console"></a>
 ## Команды для запуска из терминала
 ___
-***Локальный запуск:***
+***Локальный запуск с помощью Intellij IDEA :***
 ```bash  
 gradle clean smoke_test
 ```
@@ -76,7 +76,7 @@ ${TASK}
 "-DbrowserSize=${BROWSER_SIZE}"
 ```
 
-***Джоба Jenkins:***
+[***Джоба Jenkins:***](https://jenkins.autotests.cloud/job/Centicore-test/14)
 
 <img src="/images/Jenkins.PNG" width="400" height="200"> 
 
