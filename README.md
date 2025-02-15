@@ -1,5 +1,7 @@
 # Покрытие сайта https://centicore.ru тестами предоставляет множество преимуществ для бизнеса и пользователей. Вот основные из них:
 
+<img src="/images/logo.PNG" width="300" height="100"> 
+
 Сайт — важный инструмент для представления продукции и взаимодействия с клиентами. Для обеспечения его надежности и качества необходимо внедрение тестирования.
 Вот несколько причин, почему покрытие тестами критически важно:
 
@@ -33,17 +35,17 @@
 
 ### **Пример отчета в Telegram:**
 
-<img src="/images/allure%20report%20telegram.PNG" width="300" height="300"> 
+<img src="/images/allure%20report%20telegram.PNG" width="400" height="400"> 
 
-### **Пример Allure отчета:**
+### [**Пример Allure отчета:**](https://jenkins.autotests.cloud/job/Centicore-test/15/allure)
 
-<img src="/images/allure%20report%20Jenkins.PNG" width="300" height="170"> 
+<img src="/images/allure%20report%20Jenkins.PNG" width="400" height="300"> 
 
 ### *Тест-кейсы*
 
-<img src="/images/allure%20report%20test%20cases.PNG" width="300" height="170">
+<img src="/images/allure%20report%20test%20cases.PNG" width="400" height="300">
 
-### **Параметры сборки в Jenkins:**
+### [**Параметры сборки в Jenkins:**](https://jenkins.autotests.cloud/job/Centicore-test)
 
 - *ENVIRONMENT (окружение в котором будем запускать тесты, по умолчанию PROD)*
 - *COMMENT (комментарий, который отобразиться в Telegram отчете)*
@@ -76,7 +78,7 @@ ${TASK}
 
 ***Джоба Jenkins:***
 
-<img src="/images/Jenkins.PNG" width="300" height="150"> 
+<img src="/images/Jenkins.PNG" width="400" height="300"> 
 
 ***Видео прогона одного из автотестов:***
 

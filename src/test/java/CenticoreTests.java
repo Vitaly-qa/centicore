@@ -7,11 +7,11 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static io.qameta.allure.Allure.step;
 
+@Tag("smoke")
 public class CenticoreTests extends TestBase {
 
     @Test
     @DisplayName("Проверка перехода на страницу о компании")
-    @Tag("smoke")
     void conditionsTest() {
         step("Открываем страницу работа ", () -> {
             open("/career");
@@ -26,7 +26,6 @@ public class CenticoreTests extends TestBase {
 
     @Test
     @DisplayName("Выбор вакансии QA Инженер (Java)")
-    @Tag("smoke")
     void jobSelectionTest() {
         step("Открываем страницу вакансии", () -> {
             open("/vacancies");
@@ -46,7 +45,6 @@ public class CenticoreTests extends TestBase {
 
     @Test
     @DisplayName("Переходим на страницу Контакты")
-    @Tag("smoke")
     void contactPageTest() {
         step("Переходим на страничку Контактов", () -> {
             open("/contacts");
@@ -58,7 +56,6 @@ public class CenticoreTests extends TestBase {
 
     @Test
     @DisplayName("Переходим по кнопке Хабр на сайт Хабр")
-    @Tag("smoke")
     void goingToTheWebsiteTest() {
         step("Переход на страницу Контакты", () -> {
             open("/contacts");
@@ -77,7 +74,6 @@ public class CenticoreTests extends TestBase {
 
     @Test
     @DisplayName("Переходим на страницу Высокие технологии")
-    @Tag("smoke")
     void goToTheHighTechnologyPageTest() {
         step("Переходим на страницу экспертиза", () -> {
             open("/expertise");
