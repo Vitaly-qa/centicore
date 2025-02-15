@@ -35,15 +35,15 @@
 
 ### **Пример отчета в Telegram:**
 
-<img src="/images/allure%20report%20telegram.PNG" width="400" height="400"> 
+<img src="/images/allure%20report%20telegram.PNG" width="300" height="300"> 
 
 ### [**Пример Allure отчета:**](https://jenkins.autotests.cloud/job/Centicore-test/15/allure)
 
-<img src="/images/allure%20report%20Jenkins.PNG" width="400" height="300"> 
+<img src="/images/allure%20report%20Jenkins.PNG" width="400" height="200"> 
 
 ### *Тест-кейсы*
 
-<img src="/images/allure%20report%20test%20cases.PNG" width="400" height="300">
+<img src="/images/allure%20report%20test%20cases.PNG" width="400" height="200">
 
 ### [**Параметры сборки в Jenkins:**](https://jenkins.autotests.cloud/job/Centicore-test)
 
@@ -78,7 +78,7 @@ ${TASK}
 
 ***Джоба Jenkins:***
 
-<img src="/images/Jenkins.PNG" width="400" height="300"> 
+<img src="/images/Jenkins.PNG" width="400" height="200"> 
 
 ***Видео прогона одного из автотестов:***
 
