@@ -17,7 +17,7 @@ public class TestBase {
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
         Configuration.browser = System.getProperty("browser", "chrome");
-        Configuration.browserVersion = System.getProperty("browserVersion", "128.0");
+        Configuration.browserVersion = System.getProperty("browserVersion", "125.0");
         Configuration.browserSize = System.getProperty("browserSize", "1920x1080");
         Configuration.pageLoadStrategy = System.getProperty("loadStrategy", "eager");
         Configuration.baseUrl = System.getProperty("baseUrl", "https://centicore.ru");

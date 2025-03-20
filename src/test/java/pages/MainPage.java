@@ -1,22 +1,18 @@
 package pages;
 
 import com.codeborne.selenide.SelenideElement;
+
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
 public class MainPage {
 
-    // Элементы страницы
     private SelenideElement contactsLink = $("a[href*='/contacts']");
     private SelenideElement page3Button = $("a[href*='/page/3']");
     private SelenideElement mobileQaVacancyLink = $(".vacancies__link");
-    private SelenideElement vacancyTitle = $(".info__subtitle");
-    private SelenideElement moscowLocation = $(".locations__subtitle");
     private SelenideElement highTechCategoryLink = $(".categories__subtitle", 2);
-    private SelenideElement headingTitle = $(".heading__title");
     private SelenideElement habrLink = $(".social__link", 1);
 
-    // Методы для действий
     public void openCareerPage() {
         open("/career");
     }
