@@ -1,55 +1,56 @@
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import pages.MainPage;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
 import static io.qameta.allure.Allure.step;
 
 @Tag("smoke")
 public class CenticoreTests extends TestBase {
 
+    private MainPage mainPage = new MainPage();
+
     @Test
     @DisplayName("Проверка перехода на страницу о компании")
     void conditionsTest() {
-        step("Открываем страницу работа ", () -> {
-            open("/career");
+        step("Открываем страницу работа", () -> {
+            mainPage.openCareerPage();
         });
         step("Нажимаем на контакты", () -> {
-            $("a[href*='/contacts']").click();
+            mainPage.clickContactsLink();
         });
         step("Проверяем, что на странице содержится заголовок 'Контакты'", () -> {
+            mainPage.openContactsPage();
             $(".heading__title").shouldHave(text("Контакты"));
         });
     }
 
     @Test
-    @DisplayName("Выбор вакансии QA Инженер (Java)")
+    @DisplayName("Выбор вакансии QA Инженер (MOBILE)")
     void jobSelectionTest() {
         step("Открываем страницу вакансии", () -> {
-            open("/vacancies");
+            mainPage.openVacanciesPage();
         });
         step("Кликаем на кнопку страницы номер 3", () -> {
-            $("a[href*='/page/3']").click();
+            mainPage.goToPage3(); //
         });
-        step("Выбираем вакансию QA Инженер (Java)", () -> {
-            $(".vacancies__link").click();
+        step("Выбираем вакансию QA Инженер (MOBILE)", () -> {
+            mainPage.selectQaMobileVacancy();
         });
-        step("Проверяем заголовок на страницы вакансии", () -> {
+        step("Проверяем заголовок на странице вакансии", () -> {
             $(".info__subtitle").shouldHave(text("ПРИСОЕДИНЯЙТЕСЬ К НАМ!"));
         });
-
     }
-
 
     @Test
     @DisplayName("Переходим на страницу Контакты")
     void contactPageTest() {
         step("Переходим на страничку Контактов", () -> {
-            open("/contacts");
+            mainPage.openContactsPage();
         });
-        step("Проверяем наличиее Москвы на странице контактов", () -> {
+        step("Проверяем наличие Москвы на странице контактов", () -> {
             $(".locations__subtitle").shouldHave(text("Москва"));
         });
     }
@@ -58,14 +59,14 @@ public class CenticoreTests extends TestBase {
     @DisplayName("Переходим по кнопке Хабр на сайт Хабр")
     void goingToTheWebsiteTest() {
         step("Переход на страницу Контакты", () -> {
-            open("/contacts");
+            mainPage.openContactsPage();
             $(".nav-open").click();
         });
         step("Кликаем на кнопку Хабр", () -> {
-            $(".social__link", 1).click();
+            mainPage.goToHabrPage();
         });
         step("Переходим на страницу Хабр", () -> {
-            open("https://career.habr.com/companies/centicore");
+            mainPage.openHabrWebsite();
         });
         step("Страница содержит текст", () -> {
             $(".title").shouldHave(text("О компании «Centicore Group»"));
@@ -76,18 +77,16 @@ public class CenticoreTests extends TestBase {
     @DisplayName("Переходим на страницу Высокие технологии")
     void goToTheHighTechnologyPageTest() {
         step("Переходим на страницу экспертиза", () -> {
-            open("/expertise");
+            mainPage.openExpertisePage();
         });
         step("Выбираем категорию высокие технологии", () -> {
-            $(".categories__subtitle", 2).click();
+            mainPage.selectHighTechCategory();
         });
-        step("Страница содержит заголовок ", () -> {
+        step("Страница содержит заголовок", () -> {
             $(".heading__title").shouldHave(text("ВЫСОКИЕ ТЕХНОЛОГИИ"));
-
         });
     }
 }
-
 
 
 
