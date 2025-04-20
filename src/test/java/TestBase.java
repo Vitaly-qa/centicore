@@ -8,12 +8,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.Map;
-import static java.lang.String.format;
+
 
 public class TestBase {
+
     @BeforeAll
     static void setUpBrowserConfiguration() {
-        String getWdHost = format("https://user1:1234@%s/wd/hub", System.getProperty("wd", "selenoid.autotests.cloud"));
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
         Configuration.browser = System.getProperty("browser", "chrome");
@@ -21,17 +21,42 @@ public class TestBase {
         Configuration.browserSize = System.getProperty("browserSize", "1920x1080");
         Configuration.pageLoadStrategy = System.getProperty("loadStrategy", "eager");
         Configuration.baseUrl = System.getProperty("baseUrl", "https://centicore.ru");
-        Configuration.remote = getWdHost;
+
+        String remoteUrl = getRemoteWebDriverUrl();
+
+        if (remoteUrl != null) {
+            Configuration.remote = remoteUrl;
+        } else {
+            System.out.println("Запуск локального браузера");
+            Configuration.remote = null;
+        }
+
         Configuration.browserCapabilities = capabilities;
         capabilities.setCapability("selenoid:options", Map.<String, Object>of(
                 "enableVNC", true,
                 "enableVideo", true
         ));
+    }
 
+    private static String getRemoteWebDriverUrl() {
+        String remote = System.getProperty("remote", "");
+        if (remote.isEmpty()) {
+            return null;
+        }
+
+        String user = System.getenv("SELENOID_USER");  // Чтение из переменной окружения
+        String password = System.getenv("SELENOID_PASSWORD");  // Чтение из переменной окружения
+        String wdHost = System.getProperty("wd", "selenoid.autotests.cloud");
+
+        if (user == null || password == null) {
+            throw new IllegalStateException("Selenoid user or password not defined in environment variables");
+        }
+
+        return String.format("https://%s:%s@%s/wd/hub", user, password, wdHost);
     }
 
     @BeforeEach
-    void beforeEach() {
+    void addSelenideLogger() {
         SelenideLogger.addListener("allure", new AllureSelenide());
     }
 
@@ -44,7 +69,6 @@ public class TestBase {
 
         Selenide.closeWebDriver();
     }
-
 }
 
 
