@@ -16,12 +16,60 @@ public class TestBase {
 
     @BeforeAll
     static void setUpBrowserConfiguration() {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        Configuration.browser = System.getProperty("browser", "chrome");
-        Configuration.browserVersion = System.getProperty("browserVersion", "125.0");
+
+        String browser = System.getProperty("browser", "chrome");
+        String browserVersion = System.getProperty("browserVersion", browser.equals("firefox") ? "125.0" : "125.0");
+
+        Configuration.browser = browser;
+        Configuration.browserVersion = browserVersion;
         Configuration.browserSize = System.getProperty("browserSize", "1920x1080");
         Configuration.pageLoadStrategy = System.getProperty("loadStrategy", "eager");
         Configuration.baseUrl = System.getProperty("baseUrl", "https://centicore.ru");
+
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        Configuration.browserCapabilities = capabilities;
+
+        // Настройки для Chrome
+        if (browser.equalsIgnoreCase("chrome")) {
+            Map<String, Object> chromeOptions = Map.of(
+                    "args", List.of(
+                            "--remote-allow-origins=*",
+                            "--proxy-bypass-list=<-loopback>",
+                            "--disable-dev-shm-usage",
+                            "--window-size=1920,1080"
+                    ),
+                    "excludeSwitches", List.of("enable-automation", "load-extension"),
+                    "prefs", Map.of(
+                            "credentials_enable_service", false,
+                            "profile.default_content_setting_values.automatic_downloads", 1,
+                            "safebrowsing.enabled", true,
+                            "plugins.always_open_pdf_externally", true
+                    )
+            );
+            capabilities.setCapability("goog:chromeOptions", chromeOptions);
+        }
+
+        // Настройки для Firefox с поддержкой версий 122.0 и 125.0
+        if (browser.equalsIgnoreCase("firefox")) {
+            Map<String, Object> firefoxOptions = Map.of(
+                    "args", List.of(
+                            "--headless",
+                            "--width=1920",
+                            "--height=1080"
+                    )
+            );
+            capabilities.setCapability("moz:firefoxOptions", firefoxOptions);
+
+            if (!browserVersion.equals("122.0") && !browserVersion.equals("125.0")) {
+                throw new IllegalArgumentException("Поддерживаются только версии Firefox: 122.0 и 125.0");
+            }
+        }
+
+        // Общие настройки Selenoid
+        capabilities.setCapability("selenoid:options", Map.of(
+                "enableVNC", true,
+                "enableVideo", true
+        ));
 
         String remoteUrl = getRemoteWebDriverUrl();
         if (remoteUrl != null) {
@@ -30,28 +78,6 @@ public class TestBase {
             System.out.println("Запуск локального браузера");
             Configuration.remote = null;
         }
-
-        // Chrome options для запуска в контейнере (например, в Selenoid)
-        Map<String, Object> chromeOptions = Map.of(
-                "args", List.of(
-                        "--headless=new",                        // Новый headless режим
-                        "--disable-gpu",
-                        "--no-sandbox",
-                        "--disable-dev-shm-usage",
-                        "--window-size=1920,1080",
-                        "--remote-allow-origins=*"
-                )
-        );
-
-        capabilities.setCapability("browserName", "chrome");
-        capabilities.setCapability("acceptInsecureCerts", true);
-        capabilities.setCapability("goog:chromeOptions", chromeOptions);
-        capabilities.setCapability("selenoid:options", Map.of(
-                "enableVNC", true,
-                "enableVideo", true
-        ));
-
-        Configuration.browserCapabilities = capabilities;
     }
 
     private static String getRemoteWebDriverUrl() {
@@ -60,8 +86,8 @@ public class TestBase {
             return null;
         }
 
-        String user = System.getenv("SELENOID_USER");  // Чтение из переменной окружения
-        String password = System.getenv("SELENOID_PASSWORD");  // Чтение из переменной окружения
+        String user = System.getenv("SELENOID_USER");
+        String password = System.getenv("SELENOID_PASSWORD");
         String wdHost = System.getProperty("wd", "selenoid.autotests.cloud");
 
         if (user == null || password == null) {
@@ -82,7 +108,6 @@ public class TestBase {
         Attach.pageSource();
         Attach.browserConsoleLogs();
         Attach.addVideo();
-
         Selenide.closeWebDriver();
     }
 }
