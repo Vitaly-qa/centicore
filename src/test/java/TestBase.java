@@ -16,7 +16,6 @@ public class TestBase {
 
     @BeforeAll
     static void setUpBrowserConfiguration() {
-
         String browser = System.getProperty("browser", "chrome");
         String browserVersion = System.getProperty("browserVersion", browser.equals("firefox") ? "125.0" : "125.0");
 
@@ -27,9 +26,7 @@ public class TestBase {
         Configuration.baseUrl = System.getProperty("baseUrl", "https://centicore.ru");
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        Configuration.browserCapabilities = capabilities;
 
-        // Настройки для Chrome
         if (browser.equalsIgnoreCase("chrome")) {
             Map<String, Object> chromeOptions = Map.of(
                     "args", List.of(
@@ -49,20 +46,18 @@ public class TestBase {
             capabilities.setCapability("goog:chromeOptions", chromeOptions);
         }
 
-        // Настройки для Firefox с поддержкой версий 122.0 и 125.0
         if (browser.equalsIgnoreCase("firefox")) {
-            Map<String, Object> firefoxOptions = Map.of(
-                    "args", List.of(
-                            "--headless",
-                            "--width=1920",
-                            "--height=1080"
-                    )
-            );
-            capabilities.setCapability("moz:firefoxOptions", firefoxOptions);
-
             if (!browserVersion.equals("122.0") && !browserVersion.equals("125.0")) {
                 throw new IllegalArgumentException("Поддерживаются только версии Firefox: 122.0 и 125.0");
             }
+
+            // Настройки Firefox через FirefoxOptions
+            org.openqa.selenium.firefox.FirefoxOptions firefoxOptions = new org.openqa.selenium.firefox.FirefoxOptions();
+            firefoxOptions.addArguments("--headless");
+            firefoxOptions.addArguments("--width=1920");
+            firefoxOptions.addArguments("--height=1080");
+
+            capabilities.setCapability(org.openqa.selenium.firefox.FirefoxOptions.FIREFOX_OPTIONS, firefoxOptions);
         }
 
         // Общие настройки Selenoid
@@ -71,12 +66,13 @@ public class TestBase {
                 "enableVideo", true
         ));
 
+        Configuration.browserCapabilities = capabilities;
+
         String remoteUrl = getRemoteWebDriverUrl();
         if (remoteUrl != null) {
             Configuration.remote = remoteUrl;
         } else {
             System.out.println("Запуск локального браузера");
-            Configuration.remote = null;
         }
     }
 
