@@ -6,6 +6,8 @@ import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.List;
@@ -28,22 +30,21 @@ public class TestBase {
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
         if (browser.equalsIgnoreCase("chrome")) {
-            Map<String, Object> chromeOptions = Map.of(
-                    "args", List.of(
-                            "--remote-allow-origins=*",
-                            "--proxy-bypass-list=<-loopback>",
-                            "--disable-dev-shm-usage",
-                            "--window-size=1920,1080"
-                    ),
-                    "excludeSwitches", List.of("enable-automation", "load-extension"),
-                    "prefs", Map.of(
-                            "credentials_enable_service", false,
-                            "profile.default_content_setting_values.automatic_downloads", 1,
-                            "safebrowsing.enabled", true,
-                            "plugins.always_open_pdf_externally", true
-                    )
+            ChromeOptions chromeOptions = new ChromeOptions();
+            chromeOptions.addArguments(
+                    "--remote-allow-origins=*",
+                    "--proxy-bypass-list=<-loopback>",
+                    "--disable-dev-shm-usage",
+                    "--window-size=1920,1080"
             );
-            capabilities.setCapability("goog:chromeOptions", chromeOptions);
+            chromeOptions.setExperimentalOption("excludeSwitches", List.of("enable-automation", "load-extension"));
+            chromeOptions.setExperimentalOption("prefs", Map.of(
+                    "credentials_enable_service", false,
+                    "profile.default_content_setting_values.automatic_downloads", 1,
+                    "safebrowsing.enabled", true,
+                    "plugins.always_open_pdf_externally", true
+            ));
+            capabilities.merge(chromeOptions);
         }
 
         if (browser.equalsIgnoreCase("firefox")) {
@@ -51,16 +52,14 @@ public class TestBase {
                 throw new IllegalArgumentException("Поддерживаются только версии Firefox: 122.0 и 125.0");
             }
 
-            // Настройки Firefox через FirefoxOptions
-            org.openqa.selenium.firefox.FirefoxOptions firefoxOptions = new org.openqa.selenium.firefox.FirefoxOptions();
+            FirefoxOptions firefoxOptions = new FirefoxOptions();
             firefoxOptions.addArguments("--headless");
             firefoxOptions.addArguments("--width=1920");
             firefoxOptions.addArguments("--height=1080");
 
-            capabilities.setCapability(org.openqa.selenium.firefox.FirefoxOptions.FIREFOX_OPTIONS, firefoxOptions);
+            capabilities.merge(firefoxOptions);
         }
 
-        // Общие настройки Selenoid
         capabilities.setCapability("selenoid:options", Map.of(
                 "enableVNC", true,
                 "enableVideo", true
