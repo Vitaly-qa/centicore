@@ -35,7 +35,9 @@ public class TestBase {
                     "--remote-allow-origins=*",
                     "--proxy-bypass-list=<-loopback>",
                     "--disable-dev-shm-usage",
-                    "--window-size=1920,1080"
+                    "--window-size=1920,1080",
+                    "--headless", // Headless mode for Docker environments
+                    "--no-sandbox" // Important for Docker
             );
             chromeOptions.setExperimentalOption("excludeSwitches", List.of("enable-automation", "load-extension"));
             chromeOptions.setExperimentalOption("prefs", Map.of(
@@ -56,6 +58,7 @@ public class TestBase {
             firefoxOptions.addArguments("--headless");
             firefoxOptions.addArguments("--width=1920");
             firefoxOptions.addArguments("--height=1080");
+            firefoxOptions.addArguments("--no-sandbox"); // Added for Docker compatibility
 
             capabilities.merge(firefoxOptions);
         }
