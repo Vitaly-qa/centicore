@@ -51,4 +51,55 @@ task smoke_test(type: Test) {
         includeTags("smoke")
     }
 
-}
+    task smoke_test(type: Test) {
+        useJUnitPlatform {
+            includeTags("positive")
+        }
+
+        task smoke_test(type: Test) {
+            useJUnitPlatform {
+                includeTags("contacts")
+            }
+
+            task smoke_test(type: Test) {
+                useJUnitPlatform {
+                    includeTags("vacancy")
+                }
+
+                task smoke_test(type: Test) {
+                    useJUnitPlatform {
+                        includeTags("contacts")
+                    }
+
+                    task smoke_test(type: Test) {
+                        useJUnitPlatform {
+                            includeTags("integration")
+                        }
+
+                        task smoke_test(type: Test) {
+                            useJUnitPlatform {
+                                includeTags("technologies")
+                            }
+
+                            task smoke_test(type: Test) {
+                                useJUnitPlatform {
+                                    includeTags("language")
+                                }
+
+                                task smoke_test(type: Test) {
+                                    useJUnitPlatform {
+                                        includeTags("call")
+                                    }
+
+
+
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }

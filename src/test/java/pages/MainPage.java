@@ -20,8 +20,6 @@ public class MainPage {
     private final SelenideElement checkboxAgreement = $("label[for='check1']");
     private final SelenideElement submitButton = $(".feedback__btn");
     private final SelenideElement successModalButton = $("#succes_button");
-
-
     private final SelenideElement requestCallButton = $(".req-call");
     private final SelenideElement nameInput = $("[name='name1']");
     private final SelenideElement phoneInput = $("[name='phone1']");
