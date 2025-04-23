@@ -46,47 +46,43 @@ tasks.withType(Test) {
 }
 
 
-task smoke_test(type: Test) {
+task smoke(type: Test) {
     useJUnitPlatform {
         includeTags("smoke")
     }
 
-    task smoke_test(type: Test) {
+    task positive(type: Test) {
         useJUnitPlatform {
             includeTags("positive")
         }
 
-        task smoke_test(type: Test) {
+        task contacts(type: Test) {
             useJUnitPlatform {
                 includeTags("contacts")
             }
 
-            task smoke_test(type: Test) {
+            task vacancy(type: Test) {
                 useJUnitPlatform {
                     includeTags("vacancy")
                 }
 
-                task smoke_test(type: Test) {
-                    useJUnitPlatform {
-                        includeTags("contacts")
-                    }
 
-                    task smoke_test(type: Test) {
+                    task integration(type: Test) {
                         useJUnitPlatform {
                             includeTags("integration")
                         }
 
-                        task smoke_test(type: Test) {
+                        task technologies(type: Test) {
                             useJUnitPlatform {
                                 includeTags("technologies")
                             }
 
-                            task smoke_test(type: Test) {
+                            task language(type: Test) {
                                 useJUnitPlatform {
                                     includeTags("language")
                                 }
 
-                                task smoke_test(type: Test) {
+                                task call(type: Test) {
                                     useJUnitPlatform {
                                         includeTags("call")
                                     }
@@ -102,4 +98,4 @@ task smoke_test(type: Test) {
                 }
             }
         }
-    }
+
