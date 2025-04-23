@@ -3,7 +3,6 @@ package pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
-
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
@@ -100,13 +99,11 @@ public class MainPage {
 
     public void switchToEnglish() {
         SelenideElement languageSwitchLink = $(".lang__drop a[href*='/en/']");
-
-        // Навести курсор на элемент с помощью executeJavaScript
         executeJavaScript("arguments[0].scrollIntoView(true);", languageSwitchLink);  // Скроллим к элементу
         executeJavaScript("arguments[0].click();", languageSwitchLink);  // Кликаем на элемент
     }
 
-    // Методы для заказа звонка
+
     public void clickRequestCallButton() {
         requestCallButton.shouldBe(Condition.visible).click();
     }
