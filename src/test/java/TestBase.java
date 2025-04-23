@@ -27,33 +27,24 @@ public class TestBase {
         Configuration.pageLoadStrategy = System.getProperty("loadStrategy", "eager");
         Configuration.baseUrl = System.getProperty("baseUrl", "https://centicore.ru");
 
-        String remoteUrl = getRemoteWebDriverUrl();
+        DesiredCapabilities capabilities = new DesiredCapabilities();
 
         if (browser.equalsIgnoreCase("chrome")) {
-            Map<String, Object> chromeOptions = Map.of(
-                    "args", List.of(
-                            "--remote-allow-origins=*",
-                            "--proxy-bypass-list=<-loopback>",
-                            "--disable-dev-shm-usage",
-                            "--window-size=1920,1080"
-                    ),
-                    "excludeSwitches", List.of("enable-automation", "load-extension"),
-                    "prefs", Map.of(
-                            "credentials_enable_service", false,
-                            "profile.default_content_setting_values.automatic_downloads", 1,
-                            "safebrowsing.enabled", true,
-                            "plugins.always_open_pdf_externally", true
-                    )
+            ChromeOptions chromeOptions = new ChromeOptions();
+            chromeOptions.addArguments(
+                    "--remote-allow-origins=*",
+                    "--proxy-bypass-list=<-loopback>",
+                    "--disable-dev-shm-usage",
+                    "--window-size=1920,1080"
             );
-
-            DesiredCapabilities capabilities = new DesiredCapabilities();
-            capabilities.setCapability("goog:chromeOptions", chromeOptions);
-            capabilities.setCapability("selenoid:options", Map.of(
-                    "enableVNC", true,
-                    "enableVideo", true
+            chromeOptions.setExperimentalOption("excludeSwitches", List.of("enable-automation", "load-extension"));
+            chromeOptions.setExperimentalOption("prefs", Map.of(
+                    "credentials_enable_service", false,
+                    "profile.default_content_setting_values.automatic_downloads", 1,
+                    "safebrowsing.enabled", true,
+                    "plugins.always_open_pdf_externally", true
             ));
-
-            Configuration.browserCapabilities = capabilities;
+            capabilities.merge(chromeOptions);
         }
 
         if (browser.equalsIgnoreCase("firefox")) {
@@ -62,16 +53,21 @@ public class TestBase {
             }
 
             FirefoxOptions firefoxOptions = new FirefoxOptions();
-            firefoxOptions.addArguments("--headless", "--width=1920", "--height=1080");
+            firefoxOptions.addArguments("--headless");
+            firefoxOptions.addArguments("--width=1920");
+            firefoxOptions.addArguments("--height=1080");
 
-            firefoxOptions.setCapability("selenoid:options", Map.of(
-                    "enableVNC", true,
-                    "enableVideo", true
-            ));
-
-            Configuration.browserCapabilities = firefoxOptions;
+            capabilities.merge(firefoxOptions);
         }
 
+        capabilities.setCapability("selenoid:options", Map.of(
+                "enableVNC", true,
+                "enableVideo", true
+        ));
+
+        Configuration.browserCapabilities = capabilities;
+
+        String remoteUrl = getRemoteWebDriverUrl();
         if (remoteUrl != null) {
             Configuration.remote = remoteUrl;
         } else {
