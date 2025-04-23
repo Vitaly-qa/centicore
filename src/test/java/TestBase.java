@@ -7,6 +7,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.remote.DesiredCapabilities;
+
+import java.util.List;
 import java.util.Map;
 
 
@@ -14,16 +16,14 @@ public class TestBase {
 
     @BeforeAll
     static void setUpBrowserConfiguration() {
-
         DesiredCapabilities capabilities = new DesiredCapabilities();
         Configuration.browser = System.getProperty("browser", "chrome");
-        Configuration.browserVersion = System.getProperty("browserVersion", "127.0");
+        Configuration.browserVersion = System.getProperty("browserVersion", "125.0");
         Configuration.browserSize = System.getProperty("browserSize", "1920x1080");
         Configuration.pageLoadStrategy = System.getProperty("loadStrategy", "eager");
         Configuration.baseUrl = System.getProperty("baseUrl", "https://centicore.ru");
 
         String remoteUrl = getRemoteWebDriverUrl();
-
         if (remoteUrl != null) {
             Configuration.remote = remoteUrl;
         } else {
@@ -31,11 +31,27 @@ public class TestBase {
             Configuration.remote = null;
         }
 
-        Configuration.browserCapabilities = capabilities;
-        capabilities.setCapability("selenoid:options", Map.<String, Object>of(
+        // Chrome options для запуска в контейнере (например, в Selenoid)
+        Map<String, Object> chromeOptions = Map.of(
+                "args", List.of(
+                        "--headless=new",                        // Новый headless режим
+                        "--disable-gpu",
+                        "--no-sandbox",
+                        "--disable-dev-shm-usage",
+                        "--window-size=1920,1080",
+                        "--remote-allow-origins=*"
+                )
+        );
+
+        capabilities.setCapability("browserName", "chrome");
+        capabilities.setCapability("acceptInsecureCerts", true);
+        capabilities.setCapability("goog:chromeOptions", chromeOptions);
+        capabilities.setCapability("selenoid:options", Map.of(
                 "enableVNC", true,
                 "enableVideo", true
         ));
+
+        Configuration.browserCapabilities = capabilities;
     }
 
     private static String getRemoteWebDriverUrl() {
