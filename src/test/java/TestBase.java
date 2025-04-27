@@ -28,42 +28,8 @@ public class TestBase {
         Configuration.baseUrl = System.getProperty("baseUrl", "https://centicore.ru");
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
-
-        if (browser.equalsIgnoreCase("chrome")) {
-            ChromeOptions chromeOptions = new ChromeOptions();
-            chromeOptions.addArguments(
-                    "--remote-allow-origins=*",
-                    "--proxy-bypass-list=<-loopback>",
-                    "--disable-dev-shm-usage",
-                    "--window-size=1920,1080",
-                    "--headless", // Headless mode for Docker environments
-                    "--no-sandbox" // Important for Docker
-            );
-            chromeOptions.setExperimentalOption("excludeSwitches", List.of("enable-automation", "load-extension"));
-            chromeOptions.setExperimentalOption("prefs", Map.of(
-                    "credentials_enable_service", false,
-                    "profile.default_content_setting_values.automatic_downloads", 1,
-                    "safebrowsing.enabled", true,
-                    "plugins.always_open_pdf_externally", true
-            ));
-            capabilities.merge(chromeOptions);
-        }
-
-        if (browser.equalsIgnoreCase("firefox")) {
-            if (!browserVersion.equals("122.0") && !browserVersion.equals("125.0")) {
-                throw new IllegalArgumentException("Поддерживаются только версии Firefox: 122.0 и 125.0");
-            }
-
-            FirefoxOptions firefoxOptions = new FirefoxOptions();
-            firefoxOptions.addArguments("--headless");
-            firefoxOptions.addArguments("--width=1920");
-            firefoxOptions.addArguments("--height=1080");
-            firefoxOptions.addArguments("--no-sandbox"); // Added for Docker compatibility
-
-            capabilities.merge(firefoxOptions);
-        }
-
-        capabilities.setCapability("selenoid:options", Map.of(
+        Configuration.browserCapabilities = capabilities;
+        capabilities.setCapability("selenoid:options", Map.<String, Object>of(
                 "enableVNC", true,
                 "enableVideo", true
         ));
