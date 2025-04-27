@@ -14,6 +14,7 @@ public class TestBase {
 
     @BeforeAll
     static void setUpBrowserConfiguration() {
+        // Читаем параметры из system properties или задаём дефолтные
         String browser = System.getProperty("browser", "chrome");
         String browserVersion = System.getProperty("browserVersion", "128.0");
 
@@ -23,15 +24,15 @@ public class TestBase {
         Configuration.pageLoadStrategy = System.getProperty("loadStrategy", "eager");
         Configuration.baseUrl = System.getProperty("baseUrl", "https://centicore.ru");
 
+        // Указываем удалённые возможности для Selenoid
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        Configuration.browserCapabilities = capabilities;
         capabilities.setCapability("selenoid:options", Map.<String, Object>of(
                 "enableVNC", true,
                 "enableVideo", true
         ));
-
         Configuration.browserCapabilities = capabilities;
 
+        // Устанавливаем remote WebDriver URL, если задан
         String remoteUrl = getRemoteWebDriverUrl();
         if (remoteUrl != null) {
             Configuration.remote = remoteUrl;
@@ -59,11 +60,13 @@ public class TestBase {
 
     @BeforeEach
     void addSelenideLogger() {
+        // Подключаем логгер для Allure-репортов
         SelenideLogger.addListener("allure", new AllureSelenide());
     }
 
     @AfterEach
     void addAttachments() {
+        // Прикрепляем скриншоты, логи и видео после каждого теста
         Attach.screenshotAs("Last screenshot");
         Attach.pageSource();
         Attach.browserConsoleLogs();
