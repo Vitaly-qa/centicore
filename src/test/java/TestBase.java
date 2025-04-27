@@ -6,11 +6,7 @@ import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
-
-import java.util.List;
 import java.util.Map;
 
 
@@ -19,7 +15,7 @@ public class TestBase {
     @BeforeAll
     static void setUpBrowserConfiguration() {
         String browser = System.getProperty("browser", "chrome");
-        String browserVersion = System.getProperty("browserVersion", browser.equals("firefox") ? "125.0" : "125.0");
+        String browserVersion = System.getProperty("browserVersion", "128.0");
 
         Configuration.browser = browser;
         Configuration.browserVersion = browserVersion;
