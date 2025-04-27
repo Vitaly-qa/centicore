@@ -50,52 +50,47 @@ task smoke(type: Test) {
     useJUnitPlatform {
         includeTags("smoke")
     }
+}
 
-    task positive(type: Test) {
-        useJUnitPlatform {
-            includeTags("positive")
-        }
+task positive(type: Test) {
+    useJUnitPlatform {
+        includeTags("positive")
+    }
+}
 
-        task contacts(type: Test) {
-            useJUnitPlatform {
-                includeTags("contacts")
-            }
+task contacts(type: Test) {
+    useJUnitPlatform {
+        includeTags("contacts")
+    }
+}
 
-            task vacancy(type: Test) {
-                useJUnitPlatform {
-                    includeTags("vacancy")
-                }
+task vacancy(type: Test) {
+    useJUnitPlatform {
+        includeTags("vacancy")
+    }
+}
 
+task integration(type: Test) {
+    useJUnitPlatform {
+        includeTags("integration")
+    }
+}
 
-                    task integration(type: Test) {
-                        useJUnitPlatform {
-                            includeTags("integration")
-                        }
+task technologies(type: Test) {
+    useJUnitPlatform {
+        includeTags("technologies")
+    }
+}
 
-                        task technologies(type: Test) {
-                            useJUnitPlatform {
-                                includeTags("technologies")
-                            }
+task language(type: Test) {
+    useJUnitPlatform {
+        includeTags("language")
+    }
+}
 
-                            task language(type: Test) {
-                                useJUnitPlatform {
-                                    includeTags("language")
-                                }
-
-                                task call(type: Test) {
-                                    useJUnitPlatform {
-                                        includeTags("call")
-                                    }
-
-
-
-
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+task call(type: Test) {
+    useJUnitPlatform {
+        includeTags("call")
+    }
+}
 
