@@ -15,7 +15,7 @@ public class TestBase {
     @BeforeAll
     static void setUpBrowserConfiguration() {
         String browser = System.getProperty("browser", "chrome");
-        String browserVersion = System.getProperty("browserVersion", "128.0");
+        String browserVersion = System.getProperty("browserVersion", browser.equals("firefox") ? "125.0" : "125.0");
 
         Configuration.browser = browser;
         Configuration.browserVersion = browserVersion;
@@ -24,23 +24,11 @@ public class TestBase {
         Configuration.baseUrl = System.getProperty("baseUrl", "https://centicore.ru");
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
+        Configuration.browserCapabilities = capabilities;
         capabilities.setCapability("selenoid:options", Map.<String, Object>of(
                 "enableVNC", true,
                 "enableVideo", true
         ));
-
-        // Обновление этой строки с передачей массива строк
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments(
-                "--headless",
-                "--no-sandbox",
-                "--disable-dev-shm-usage",
-                "--disable-gpu",
-                "--remote-allow-origins=*",
-                "--window-size=1920,1080"
-        );
-
-        capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 
         Configuration.browserCapabilities = capabilities;
 
