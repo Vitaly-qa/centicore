@@ -23,28 +23,27 @@ public class TestBase {
         Configuration.pageLoadStrategy = System.getProperty("loadStrategy", "eager");
         Configuration.baseUrl = System.getProperty("baseUrl", "https://centicore.ru");
 
-        // Настройка возможностей браузера
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("selenoid:options", Map.<String, Object>of(
                 "enableVNC", true,
                 "enableVideo", true
         ));
 
-        // Настроить флаги для Chrome
-        capabilities.setCapability("goog:chromeOptions", Map.of(
-                "args", new String[]{
-                        "--headless=new",
-                        "--no-sandbox",
-                        "--disable-dev-shm-usage",
-                        "--disable-gpu",
-                        "--remote-allow-origins=*",
-                        "--window-size=1920,1080"
-                }
-        ));
+        // Обновление этой строки с передачей массива строк
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments(
+                "--headless",
+                "--no-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--remote-allow-origins=*",
+                "--window-size=1920,1080"
+        );
+
+        capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 
         Configuration.browserCapabilities = capabilities;
 
-        // Настройка удалённого WebDriver URL
         String remoteUrl = getRemoteWebDriverUrl();
         if (remoteUrl != null) {
             Configuration.remote = remoteUrl;
