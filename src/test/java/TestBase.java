@@ -30,7 +30,24 @@ public class TestBase {
                 "enableVideo", true
         ));
 
+        // Добавляем необходимые аргументы для запуска Chrome
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments(
+                "--headless", // запуск в headless-режиме
+                "--no-sandbox", // предотвращает ошибки, связанные с правами
+                "--disable-dev-shm-usage", // использование памяти в контейнерах
+                "--disable-gpu", // отключение GPU
+                "--remote-allow-origins=*",
+                "--window-size=1920,1080",
+                "--disable-software-rasterizer", // отключение программного рендеринга
+                "--remote-debugging-port=9222", // удалённая отладка
+                "--disable-features=VizDisplayCompositor", // отключение графических функций
+                "--disable-extensions", // отключение расширений
+                "--disable-infobars", // отключение информационных панелей
+                "--start-maximized" // запуск с максимизированным окном
+        );
 
+       capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 
         Configuration.browserCapabilities = capabilities;
 
