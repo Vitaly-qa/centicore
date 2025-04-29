@@ -41,9 +41,9 @@ public class TestBase {
     }
 
     private static String getRemoteWebDriverUrl() {
-        String remote = System.getProperty("remoteUrl");
-        if (remote == null || remote.isEmpty()) {
-            return null; // или выбросить исключение, если обязательный параметр
+        String remote = System.getProperty("remote", "");
+        if (remote.isEmpty()) {
+            return (remote);
         }
 
         String user = System.getenv("SELENOID_USER");
