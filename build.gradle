@@ -9,9 +9,6 @@ java {
     }
 }
 
-group = 'ru.avtozp2015'
-version = '1.0-SNAPSHOT'
-
 allure {
     report {
         version.set("2.27.0")
