@@ -24,41 +24,37 @@ public class TestBase {
         Configuration.baseUrl = System.getProperty("baseUrl", "https://centicore.ru");
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("selenoid:options", Map.of(
+        capabilities.setCapability("selenoid:options", Map.<String, Object>of(
                 "enableVNC", true,
                 "enableVideo", true
         ));
 
         Configuration.browserCapabilities = capabilities;
 
-        // Установка remote, если нужно
+        // Указание Selenoid URL
         String remoteUrl = getRemoteWebDriverUrl();
         if (remoteUrl != null) {
             Configuration.remote = remoteUrl;
-            System.out.println("Запуск на Selenoid: " + remoteUrl);
         } else {
             System.out.println("Запуск локального браузера");
         }
     }
 
     private static String getRemoteWebDriverUrl() {
-        // Если передан полный URL через -Dremote — используем его
-        String fullRemoteUrl = System.getProperty("remote", "");
-        if (!fullRemoteUrl.isEmpty()) {
-            return fullRemoteUrl;
+        String remote = System.getProperty("remote", "");
+        if (remote.isEmpty()) {
+            return null;
         }
 
-        // Если переменная remote не задана — пробуем собрать URL из частей
         String user = System.getenv("SELENOID_USER");
         String password = System.getenv("SELENOID_PASSWORD");
         String wdHost = System.getProperty("wd", "selenoid.autotests.cloud");
 
-        if (user != null && password != null) {
-            return String.format("https://%s:%s@%s/wd/hub", user, password, wdHost);
+        if (user == null || password == null) {
+            throw new IllegalStateException("Selenoid user or password not defined in environment variables");
         }
 
-        // Ни URL, ни логин с паролем не заданы — значит локальный запуск
-        return null;
+        return String.format("https://%s:%s@%s/wd/hub", user, password, wdHost);
     }
 
     @BeforeEach
@@ -66,12 +62,14 @@ public class TestBase {
         SelenideLogger.addListener("allure", new AllureSelenide());
     }
 
+
     @AfterEach
     void addAttachments() {
         Attach.screenshotAs("Last screenshot");
         Attach.pageSource();
         Attach.browserConsoleLogs();
         Attach.addVideo();
+
         Selenide.closeWebDriver();
     }
 }
