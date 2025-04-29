@@ -41,19 +41,27 @@ public class TestBase {
     }
 
     private static String getRemoteWebDriverUrl() {
+        // Получаем системное свойство remote, по умолчанию false
         String remote = System.getProperty("remote", "false");
-        if (!"true".equalsIgnoreCase(remote)) {
+
+        // Если remote не true — возвращаем null (тесты будут запускаться локально)
+        if (!remote.equalsIgnoreCase("true")) {
             return null;
         }
 
+        // Получаем логин и пароль из переменных окружения
         String user = System.getenv("SELENOID_USER");
         String password = System.getenv("SELENOID_PASSWORD");
+
+        // Получаем хост для selenoid, по умолчанию — selenoid.autotests.cloud
         String wdHost = System.getProperty("wd", "selenoid.autotests.cloud");
 
-        if (user == null || password == null) {
+        // Проверка на наличие логина и пароля
+        if (user == null || password == null || user.isEmpty() || password.isEmpty()) {
             throw new IllegalStateException("Selenoid user or password not defined in environment variables");
         }
 
+        // Собираем и возвращаем полный URL
         return String.format("https://%s:%s@%s/wd/hub", user, password, wdHost);
     }
 
