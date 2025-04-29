@@ -41,7 +41,7 @@ public class TestBase {
     }
 
     private static String getRemoteWebDriverUrl() {
-        String remote = System.getProperty("remote", "");
+        String remote = System.getProperty("remote", "selenoid.autotests.cloud");
         if (remote.isEmpty()) {
             return null;
         }
