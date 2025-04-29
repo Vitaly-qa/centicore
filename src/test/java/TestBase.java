@@ -24,45 +24,41 @@ public class TestBase {
         Configuration.baseUrl = System.getProperty("baseUrl", "https://centicore.ru");
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("selenoid:options", Map.<String, Object>of(
+        capabilities.setCapability("selenoid:options", Map.of(
                 "enableVNC", true,
                 "enableVideo", true
         ));
 
         Configuration.browserCapabilities = capabilities;
 
-        // Указание Selenoid URL
+        // Установка remote, если нужно
         String remoteUrl = getRemoteWebDriverUrl();
         if (remoteUrl != null) {
             Configuration.remote = remoteUrl;
+            System.out.println("Запуск на Selenoid: " + remoteUrl);
         } else {
             System.out.println("Запуск локального браузера");
         }
     }
 
     private static String getRemoteWebDriverUrl() {
-        // Получаем системное свойство remote, по умолчанию false
-        String remote = System.getProperty("remote", "false");
-
-        // Если remote не true — возвращаем null (тесты будут запускаться локально)
-        if (!remote.equalsIgnoreCase("true")) {
-            return null;
+        // Если передан полный URL через -Dremote — используем его
+        String fullRemoteUrl = System.getProperty("remote", "");
+        if (!fullRemoteUrl.isEmpty()) {
+            return fullRemoteUrl;
         }
 
-        // Получаем логин и пароль из переменных окружения
+        // Если переменная remote не задана — пробуем собрать URL из частей
         String user = System.getenv("SELENOID_USER");
         String password = System.getenv("SELENOID_PASSWORD");
-
-        // Получаем хост для selenoid, по умолчанию — selenoid.autotests.cloud
         String wdHost = System.getProperty("wd", "selenoid.autotests.cloud");
 
-        // Проверка на наличие логина и пароля
-        if (user == null || password == null || user.isEmpty() || password.isEmpty()) {
-            throw new IllegalStateException("Selenoid user or password not defined in environment variables");
+        if (user != null && password != null) {
+            return String.format("https://%s:%s@%s/wd/hub", user, password, wdHost);
         }
 
-        // Собираем и возвращаем полный URL
-        return String.format("https://%s:%s@%s/wd/hub", user, password, wdHost);
+        // Ни URL, ни логин с паролем не заданы — значит локальный запуск
+        return null;
     }
 
     @BeforeEach
@@ -70,14 +66,12 @@ public class TestBase {
         SelenideLogger.addListener("allure", new AllureSelenide());
     }
 
-
     @AfterEach
     void addAttachments() {
         Attach.screenshotAs("Last screenshot");
         Attach.pageSource();
         Attach.browserConsoleLogs();
         Attach.addVideo();
-
         Selenide.closeWebDriver();
     }
 }
