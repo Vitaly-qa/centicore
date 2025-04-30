@@ -9,68 +9,49 @@ import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.Map;
 
+import static com.codeborne.selenide.Configuration.baseUrl;
+import static com.codeborne.selenide.Selenide.open;
+
 
 public class TestBase {
+    public static final String REMOTE_URL = System.getProperty("remoteUrl");
 
     @BeforeAll
-    static void setUpBrowserConfiguration() {
-        String browser = System.getProperty("browser", "chrome");
-        String browserVersion = System.getProperty("browserVersion", "128.0");
-
-        Configuration.browser = browser;
-        Configuration.browserVersion = browserVersion;
+    public static void config() {
+        Configuration.browser = System.getProperty("browser", "chrome");
+        Configuration.browserVersion = System.getProperty("browserVersion", "128.0");
         Configuration.browserSize = System.getProperty("browserSize", "1920x1080");
-        Configuration.pageLoadStrategy = System.getProperty("loadStrategy", "eager");
-        Configuration.baseUrl = System.getProperty("baseUrl", "https://centicore.ru");
+        Configuration.pageLoadStrategy = "eager";
+        baseUrl = "https://centicore.ru";
 
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("selenoid:options", Map.<String, Object>of(
-                "enableVNC", true,
-                "enableVideo", true
-        ));
+        if (REMOTE_URL != null && !REMOTE_URL.isEmpty()) {
+            Configuration.remote = "https://" + REMOTE_URL + "/wd/hub";
 
-        Configuration.browserCapabilities = capabilities;
-
-        // Указание Selenoid URL
-        String remoteUrl = getRemoteWebDriverUrl();
-        if (remoteUrl != null) {
-            Configuration.remote = remoteUrl;
-        } else {
-            System.out.println("Запуск локального браузера");
+            DesiredCapabilities capabilities = new DesiredCapabilities();
+            capabilities.setCapability("selenoid:options", Map.<String, Object>of(
+                    "enableVNC", true,
+                    "enableVideo", true
+            ));
+            Configuration.browserCapabilities = capabilities;
         }
-    }
-
-    private static String getRemoteWebDriverUrl() {
-        String remote = System.getProperty("remote", "selenoid.autotests.cloud");
-        if (remote.isEmpty()) {
-            return null;
-        }
-
-        String user = System.getenv("SELENOID_USER");
-        String password = System.getenv("SELENOID_PASSWORD");
-        String wdHost = System.getProperty("wd", "selenoid.autotests.cloud");
-
-        if (user == null || password == null) {
-            throw new IllegalStateException("Selenoid user or password not defined in environment variables");
-        }
-
-        return String.format("https://%s:%s@%s/wd/hub", user, password, wdHost);
     }
 
     @BeforeEach
-    void addSelenideLogger() {
+    public void setUp() {
         SelenideLogger.addListener("allure", new AllureSelenide());
+        open(baseUrl);
     }
 
-
     @AfterEach
-    void addAttachments() {
+    public void tearDown() {
         Attach.screenshotAs("Last screenshot");
         Attach.pageSource();
-        Attach.browserConsoleLogs();
+        if (!Configuration.browser.equalsIgnoreCase("firefox")) {
+            Attach.browserConsoleLogs();
+        }
         Attach.addVideo();
-
         Selenide.closeWebDriver();
+        SelenideLogger.removeListener("allure");
     }
 }
 
