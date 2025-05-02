@@ -43,7 +43,7 @@ public class TestBase {
 
     private static String getRemoteWebDriverUrl() {
         String remote = System.getProperty("remote");
-        if (remote.isEmpty()) {
+        if (remote == null || remote.isEmpty()) {
             return null;
         }
 
