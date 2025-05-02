@@ -12,57 +12,50 @@ import java.util.Map;
 
 public class TestBase {
 
-
     @BeforeAll
     static void setUpBrowserConfiguration() {
-        String browser = System.getProperty("browser", "chrome");
-        String browserVersion = System.getProperty("browserVersion", "128.0");
-        Configuration.remote = "https://user1:1234@" + System.getProperty("remoteHost") + "wd/hub";
-        Configuration.browser = browser;
-        Configuration.browserVersion = browserVersion;
+        Configuration.browser = System.getProperty("browser", "chrome");
+        Configuration.browserVersion = System.getProperty("browserVersion", "128.0");
         Configuration.browserSize = System.getProperty("browserSize", "1920x1080");
         Configuration.pageLoadStrategy = System.getProperty("loadStrategy", "eager");
         Configuration.baseUrl = System.getProperty("baseUrl", "https://centicore.ru");
 
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("selenoid:options", Map.<String, Object>of(
-                "enableVNC", true,
-                "enableVideo", true
-        ));
-
-        Configuration.browserCapabilities = capabilities;
-
-        // Указание Selenoid URL
         String remoteUrl = getRemoteWebDriverUrl();
         if (remoteUrl != null) {
             Configuration.remote = remoteUrl;
+            System.out.println("✅ Запуск через Selenoid: " + remoteUrl);
         } else {
-            System.out.println("Запуск локального браузера");
+            Configuration.remote = null;
+            System.out.println("⚠️ Запуск локального браузера");
         }
+
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setCapability("selenoid:options", Map.of(
+                "enableVNC", true,
+                "enableVideo", true
+        ));
+        Configuration.browserCapabilities = capabilities;
     }
 
     private static String getRemoteWebDriverUrl() {
-        String remote = System.getProperty("remote");
-        if (remote == null || remote.isEmpty()) {
-            return null;
+        String useRemote = System.getProperty("remote", ""); // Если -Dremote передан
+        if (useRemote.isEmpty()) {
+            return null; // Локальный запуск
         }
 
         String user = System.getenv("SELENOID_USER");
         String password = System.getenv("SELENOID_PASSWORD");
-        String wdHost = System.getProperty("wd", "selenoid.autotests.cloud");
+        String host = System.getProperty("wd", "selenoid.autotests.cloud");
 
-        if (user == null || password == null) {
-            throw new IllegalStateException("Selenoid user or password not defined in environment variables");
-        }
 
-        return String.format("https://%s:%s@%s/wd/hub", user, password, wdHost);
+
+        return String.format("https://%s:%s@%s/wd/hub", user, password, host);
     }
 
     @BeforeEach
     void addSelenideLogger() {
         SelenideLogger.addListener("allure", new AllureSelenide());
     }
-
 
     @AfterEach
     void addAttachments() {
