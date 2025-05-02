@@ -42,7 +42,7 @@ public class TestBase {
     }
 
     private static String getRemoteWebDriverUrl() {
-        String remote = System.getProperty("remote", "https://user1:1234@\" + System.getProperty(\"remoteHost\") + \"wd/hub\"");
+        String remote = System.getProperty("remote");
         if (remote.isEmpty()) {
             return null;
         }
