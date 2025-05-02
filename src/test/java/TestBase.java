@@ -9,37 +9,36 @@ import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.Map;
 
+import static java.lang.String.format;
+
 
 public class TestBase {
-
     @BeforeAll
-    static void beforeAll() {
-        Configuration.baseUrl = "https://centicore.ru";
-        Configuration.browserSize = System.getProperty("browserSize", "1920x1080");
-        Configuration.pageLoadStrategy = "eager";
-        Configuration.browser = System.getProperty("browser", "chrome");
-        Configuration.browserVersion = System.getProperty("browserVersion", "128.0");
-
-        String remoteHost = System.getProperty("remoteHost");
-        if (remoteHost != null && !remoteHost.isEmpty()) {
-            Configuration.remote = "https://user1:1234@" + remoteHost + "/wd/hub";
-        }
+    static void setUpBrowserConfiguration() {
+        String getWdHost = format("https://user1:1234@%s/wd/hub", System.getProperty("wd", "selenoid.autotests.cloud"));
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
+        Configuration.browser = System.getProperty("browser", "chrome");
+        Configuration.browserVersion = System.getProperty("browserVersion", "128.0");
+        Configuration.browserSize = System.getProperty("browserSize", "1920x1080");
+        Configuration.pageLoadStrategy = System.getProperty("loadStrategy", "eager");
+        Configuration.baseUrl = System.getProperty("baseUrl", "https://centicore.ru");
+        Configuration.remote = getWdHost;
+        Configuration.browserCapabilities = capabilities;
         capabilities.setCapability("selenoid:options", Map.<String, Object>of(
                 "enableVNC", true,
                 "enableVideo", true
         ));
-        Configuration.browserCapabilities = capabilities;
+
     }
 
     @BeforeEach
     void beforeEach() {
-        SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
+        SelenideLogger.addListener("allure", new AllureSelenide());
     }
 
     @AfterEach
-    void finalSteps() {
+    void addAttachments() {
         Attach.screenshotAs("Last screenshot");
         Attach.pageSource();
         Attach.browserConsoleLogs();
@@ -47,6 +46,7 @@ public class TestBase {
 
         Selenide.closeWebDriver();
     }
+
 }
 
 
