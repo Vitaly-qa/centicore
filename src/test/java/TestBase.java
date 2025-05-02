@@ -23,10 +23,10 @@ public class TestBase {
         String remoteUrl = getRemoteWebDriverUrl();
         if (remoteUrl != null) {
             Configuration.remote = remoteUrl;
-            System.out.println("✅ Запуск через Selenoid: " + remoteUrl);
+
         } else {
             Configuration.remote = null;
-            System.out.println("⚠️ Запуск локального браузера");
+
         }
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
