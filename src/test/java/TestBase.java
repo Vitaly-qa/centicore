@@ -9,50 +9,45 @@ import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.Map;
 
-import static com.codeborne.selenide.Configuration.baseUrl;
-import static com.codeborne.selenide.Selenide.open;
-
 
 public class TestBase {
-    public static final String REMOTE_URL = System.getProperty("remoteUrl");
+
 
     @BeforeAll
-    public static void config() {
-        Configuration.browser = System.getProperty("browser", "chrome");
-        Configuration.browserVersion = System.getProperty("browserVersion", "128.0");
+    static void setUpBrowserConfiguration() {
+        String browser = System.getProperty("browser", "chrome");
+        String browserVersion = System.getProperty("browserVersion", "128.0");
+        Configuration.remote = "https://user1:1234@" + System.getProperty("remoteHost") + "wd/hub";
+        Configuration.browser = browser;
+        Configuration.browserVersion = browserVersion;
         Configuration.browserSize = System.getProperty("browserSize", "1920x1080");
-        Configuration.pageLoadStrategy = "eager";
-        baseUrl = "https://centicore.ru";
+        Configuration.pageLoadStrategy = System.getProperty("loadStrategy", "eager");
+        Configuration.baseUrl = System.getProperty("baseUrl", "https://centicore.ru");
 
-        if (REMOTE_URL != null && !REMOTE_URL.isEmpty()) {
-            Configuration.remote = "https://" + REMOTE_URL + "/wd/hub";
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setCapability("selenoid:options", Map.<String, Object>of(
+                "enableVNC", true,
+                "enableVideo", true
+        ));
+        Configuration.browserCapabilities = capabilities;
 
-            DesiredCapabilities capabilities = new DesiredCapabilities();
-            capabilities.setCapability("selenoid:options", Map.<String, Object>of(
-                    "enableVNC", true,
-                    "enableVideo", true
-            ));
-            Configuration.browserCapabilities = capabilities;
-        }
     }
 
     @BeforeEach
-    public void setUp() {
-        SelenideLogger.addListener("allure", new AllureSelenide());
-        open(baseUrl);
+    void beforeEach() {
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
     }
 
     @AfterEach
-    public void tearDown() {
+    void finalSteps() {
         Attach.screenshotAs("Last screenshot");
         Attach.pageSource();
-        if (!Configuration.browser.equalsIgnoreCase("firefox")) {
-            Attach.browserConsoleLogs();
-        }
+        Attach.browserConsoleLogs();
         Attach.addVideo();
+
         Selenide.closeWebDriver();
-        SelenideLogger.removeListener("allure");
     }
+
 }
 
 
