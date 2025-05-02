@@ -12,38 +12,34 @@ import java.util.Map;
 
 public class TestBase {
 
-
     @BeforeAll
-    static void setUpBrowserConfiguration() {
-        String browser = System.getProperty("browser", "chrome");
-        String browserVersion = System.getProperty("browserVersion", "128.0");
-        Configuration.remote = "https://user1:1234@" + System.getProperty("remoteHost") + "wd/hub";
-        Configuration.browser = browser;
-        Configuration.browserVersion = browserVersion;
+    static void beforeAll() {
+        Configuration.baseUrl = "https://centicore.ru";
         Configuration.browserSize = System.getProperty("browserSize", "1920x1080");
-        Configuration.pageLoadStrategy = System.getProperty("loadStrategy", "eager");
-        Configuration.baseUrl = System.getProperty("baseUrl", "https://centicore.ru");
+        Configuration.pageLoadStrategy = "eager";
+        Configuration.browser = System.getProperty("browser", "chrome");
+        Configuration.browserVersion = System.getProperty("browserVersion", "128.0");
+
+        String remoteHost = System.getProperty("remoteHost");
+        if (remoteHost != null && !remoteHost.isEmpty()) {
+            Configuration.remote = "https://user1:1234@" + remoteHost + "/wd/hub";
+        }
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("selenoid:options", Map.<String, Object>of(
                 "enableVNC", true,
                 "enableVideo", true
         ));
-
         Configuration.browserCapabilities = capabilities;
-
     }
-
-
 
     @BeforeEach
-    void addSelenideLogger() {
-        SelenideLogger.addListener("allure", new AllureSelenide());
+    void beforeEach() {
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
     }
 
-
     @AfterEach
-    void addAttachments() {
+    void finalSteps() {
         Attach.screenshotAs("Last screenshot");
         Attach.pageSource();
         Attach.browserConsoleLogs();
