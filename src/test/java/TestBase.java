@@ -29,17 +29,43 @@ public class TestBase {
                 "enableVNC", true,
                 "enableVideo", true
         ));
+
         Configuration.browserCapabilities = capabilities;
 
+        // Указание Selenoid URL
+        String remoteUrl = getRemoteWebDriverUrl();
+        if (remoteUrl != null) {
+            Configuration.remote = remoteUrl;
+        } else {
+            System.out.println("Запуск локального браузера");
+        }
+    }
+
+    private static String getRemoteWebDriverUrl() {
+        String remote = System.getProperty("remote", "https://user1:1234@\" + System.getProperty(\"remoteHost\") + \"wd/hub\"");
+        if (remote.isEmpty()) {
+            return null;
+        }
+
+        String user = System.getenv("SELENOID_USER");
+        String password = System.getenv("SELENOID_PASSWORD");
+        String wdHost = System.getProperty("wd", "selenoid.autotests.cloud");
+
+        if (user == null || password == null) {
+            throw new IllegalStateException("Selenoid user or password not defined in environment variables");
+        }
+
+        return String.format("https://%s:%s@%s/wd/hub", user, password, wdHost);
     }
 
     @BeforeEach
-    void beforeEach() {
-        SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
+    void addSelenideLogger() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
     }
 
+
     @AfterEach
-    void finalSteps() {
+    void addAttachments() {
         Attach.screenshotAs("Last screenshot");
         Attach.pageSource();
         Attach.browserConsoleLogs();
@@ -47,7 +73,6 @@ public class TestBase {
 
         Selenide.closeWebDriver();
     }
-
 }
 
 
