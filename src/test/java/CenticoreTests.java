@@ -49,7 +49,7 @@ public class CenticoreTests extends TestBase {
         step("Выбираем вакансию 'QA Инженер (Java)'", mainPage::selectQaJavaVacancy);
 
         step("Проверяем наличие заголовка вакансии", () ->
-                $(".article__top").shouldHave(text("QA Инженер (Java)")));
+                $(".article__top").shouldHave(text("QA Fullstack (Стек Java)")));
     }
 
     @Test

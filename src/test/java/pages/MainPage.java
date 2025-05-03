@@ -90,7 +90,7 @@ public class MainPage {
 
     public void selectQaJavaVacancy() {
         executeJavaScript("arguments[0].click();",
-                $$("a.vacancies__link").findBy(Condition.text("QA Инженер (Java)")));
+                $$("a.vacancies__link").findBy(Condition.text("QA Fullstack (Стек Java)")));
     }
 
     public void openHomePage() {
