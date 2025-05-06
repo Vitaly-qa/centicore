@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.lang.String.format;
 
@@ -15,7 +16,15 @@ import static java.lang.String.format;
 public class TestBase {
     @BeforeAll
     static void setUpBrowserConfiguration() {
-        String getWdHost = format("https://user1:1234@%s/wd/hub", System.getProperty("wd", "selenoid.autotests.cloud"));
+
+        String selenoidDomain = System.getProperty("wd");
+
+        if (!Objects.isNull(selenoidDomain)) {
+            String selenoidUserName = System.getProperty("selenoidUserName");
+            String selenoidPassword = System.getProperty("selenoidPassword");
+            String  getWdHost = format("https://%s:%s@%s/wd/hub", selenoidUserName, selenoidPassword, selenoidDomain);
+            Configuration.remote = getWdHost;
+        }
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
         Configuration.browser = System.getProperty("browser", "chrome");
@@ -23,7 +32,6 @@ public class TestBase {
         Configuration.browserSize = System.getProperty("browserSize", "1920x1080");
         Configuration.pageLoadStrategy = System.getProperty("loadStrategy", "eager");
         Configuration.baseUrl = System.getProperty("baseUrl", "https://centicore.ru");
-        Configuration.remote = getWdHost;
         Configuration.browserCapabilities = capabilities;
         capabilities.setCapability("selenoid:options", Map.<String, Object>of(
                 "enableVNC", true,
